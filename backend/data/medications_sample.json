@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Acetaminophen",
+    "indications": ["pain", "fever"],
+    "contraindications": ["severe liver disease"],
+    "age_min": 12,
+    "age_max": null,
+    "notes": "Avoid exceeding recommended daily dose."
+  },
+  {
+    "name": "Ibuprofen",
+    "indications": ["pain", "inflammation", "fever"],
+    "contraindications": ["peptic ulcer", "kidney disease"],
+    "age_min": 12,
+    "age_max": null,
+    "notes": "Take with food."
+  },
+  {
+    "name": "Metformin",
+    "indications": ["type 2 diabetes"],
+    "contraindications": ["severe kidney disease"],
+    "age_min": 10,
+    "age_max": null,
+    "notes": "Monitor renal function."
+  },
+  {
+    "name": "Amlodipine",
+    "indications": ["hypertension"],
+    "contraindications": ["severe hypotension"],
+    "age_min": 18,
+    "age_max": null,
+    "notes": "Check blood pressure regularly."
+  }
+]
