@@ -283,6 +283,7 @@ class MedicationRecommendationRequest(BaseModel):
     symptoms: Optional[List[str]] = None
     conditions: Optional[List[str]] = None
     age: Optional[int] = None
+    preview_only: bool = False
 
 
 class HealthRiskAssessment(BaseModel):

@@ -26,17 +26,17 @@ const FitnessTracking = () => {
     notes: '',
   });
 
-  // Load records on mount
+  // Load records when patientId is available
   useEffect(() => {
-    loadRecords();
-  }, []);
+    if (patientId) loadRecords();
+  }, [patientId]);
 
-  // Auto-generate analysis when records update
+  // Auto-generate analysis when switching to the analysis tab (not on every record change)
   useEffect(() => {
-    if (fitnessRecords.length >= 3 && activeTab === 'analysis') {
+    if (fitnessRecords.length >= 3 && activeTab === 'analysis' && !aiAnalysis) {
       generateAiAnalysis();
     }
-  }, [fitnessRecords, activeTab]);
+  }, [activeTab, fitnessRecords.length]);
 
   const loadRecords = async () => {
     if (!patientId) return;
@@ -97,11 +97,12 @@ const FitnessTracking = () => {
   };
 
   const generateFallbackAnalysis = () => {
-    const latestRecord = fitnessRecords[0];
-    const avgBmi = (fitnessRecords.reduce((sum, r) => sum + r.bmi, 0) / fitnessRecords.length).toFixed(1);
-    const avgStress = (fitnessRecords.reduce((sum, r) => sum + r.stressLevel, 0) / fitnessRecords.length).toFixed(1);
-    const avgSleep = (fitnessRecords.reduce((sum, r) => sum + r.sleepHours, 0) / fitnessRecords.length).toFixed(1);
-    const avgWalking = (fitnessRecords.reduce((sum, r) => sum + r.walkingDistance, 0) / fitnessRecords.length).toFixed(1);
+    const latestRecord = fitnessRecords[0] || {};
+    const count = fitnessRecords.length || 1;
+    const avgBmi = (fitnessRecords.reduce((sum, r) => sum + (parseFloat(r.bmi) || 0), 0) / count).toFixed(1);
+    const avgStress = (fitnessRecords.reduce((sum, r) => sum + (parseFloat(r.stressLevel) || 0), 0) / count).toFixed(1);
+    const avgSleep = (fitnessRecords.reduce((sum, r) => sum + (parseFloat(r.sleepHours) || 0), 0) / count).toFixed(1);
+    const avgWalking = (fitnessRecords.reduce((sum, r) => sum + (parseFloat(r.walkingDistance) || 0), 0) / count).toFixed(1);
 
     setAiAnalysis({
       summary: '📊 Your Health Summary',
@@ -413,16 +414,30 @@ const FitnessTracking = () => {
           >
             {fitnessRecords.length < 3 ? (
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-8 text-center">
-                <p className="text-blue-900 font-semibold">
-                  📊 Need at least 3 days of data for AI analysis. You have {fitnessRecords.length} record(s).
+                <div className="text-5xl mb-3">📊</div>
+                <p className="text-blue-900 font-semibold text-lg mb-2">
+                  Need at least 3 days of data for AI analysis.
                 </p>
+                <p className="text-blue-700 text-sm">You have {fitnessRecords.length} record(s). Add {3 - fitnessRecords.length} more to unlock AI insights.</p>
               </div>
             ) : (
               <>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-gray-900">🤖 AI Analysis — {fitnessRecords.length} days of data</h2>
+                  <button
+                    onClick={() => { setAiAnalysis(null); generateAiAnalysis(); }}
+                    disabled={generatingAnalysis}
+                    className="px-4 py-2 bg-white border-2 border-indigo-400 text-indigo-700 rounded-lg font-semibold text-sm hover:bg-indigo-50 transition-all disabled:opacity-50"
+                  >
+                    {generatingAnalysis ? '⏳ Analyzing...' : '🔄 Refresh Analysis'}
+                  </button>
+                </div>
+
                 {generatingAnalysis && (
-                  <div className="text-center py-8">
-                    <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                    <p className="mt-4 text-gray-600">🤖 Analyzing your health data with Gemini AI...</p>
+                  <div className="text-center py-12 bg-white rounded-2xl shadow-lg">
+                    <div className="inline-block w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    <p className="mt-4 text-gray-700 font-semibold">🤖 Gemini AI is analyzing your health data...</p>
+                    <p className="text-gray-500 text-sm mt-1">Building your personalized roadmap</p>
                   </div>
                 )}
 

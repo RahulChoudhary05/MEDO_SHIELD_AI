@@ -90,7 +90,7 @@ export default function Medications() {
 
   // ── Load ──────────────────────────────────────────────
   const loadMedications = useCallback(async () => {
-    if (!patientId) return;
+    if (!patientId || String(patientId) === 'undefined') return;
     setLoading(true); setError('');
     try {
       const res = await healthAPI.getMedicationSchedule(patientId);
@@ -143,6 +143,7 @@ export default function Medications() {
         patient_id: patientId,
         symptoms: [recInput.symptoms],
         age: recInput.age ? parseInt(recInput.age) : null,
+        preview_only: true,
       });
       setRecResults(res.data);
     } catch (e) {

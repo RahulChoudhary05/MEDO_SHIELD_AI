@@ -62,7 +62,7 @@ async def _create_notification(db, patient_id: str, title: str, message: str, ca
     })
 
 
-async def _call_gemini(prompt: str) -> str:
+async def _call_gemini(prompt: str, max_tokens: int = 1200) -> str:
     if not settings.GEMINI_API_KEY:
         return ""
 
@@ -74,13 +74,13 @@ async def _call_gemini(prompt: str) -> str:
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.4,
-            "maxOutputTokens": 800
+            "maxOutputTokens": max_tokens
         }
     }
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post(url, json=payload, timeout=30) as response:
+            async with session.post(url, json=payload, timeout=60) as response:
                 data = await response.json()
         candidates = data.get("candidates", [])
         if not candidates:
@@ -558,37 +558,27 @@ async def get_medication_recommendations(
         conditions=request.conditions
     )
 
-    # Save recommendation to database
-    await db["medication_recommendations"].insert_one({
-        "patient_id": request.patient_id,
-        "symptoms": symptoms_text,
-        "age": request.age,
-        "recommendations": recommendations,
-        "created_at": datetime.utcnow(),
-        "created_by": context["user_id"]
-    })
-
-    # Create notification
-    await _create_notification(
-        db,
-        request.patient_id,
-        "Medication Recommendations Available",
-        f"New medication recommendations based on your symptoms: {symptoms_text[:50]}...",
-        "medication"
-    )
-
-    # Auto-generate medication schedule if recommendations are available
-    if recommendations.get('medications'):
-        await _auto_generate_medication_schedule(
-            db, 
-            request.patient_id, 
-            recommendations['medications'],
-            patient_profile['age']
+    if not request.preview_only:
+        await db["medication_recommendations"].insert_one({
+            "patient_id": request.patient_id,
+            "symptoms": symptoms_text,
+            "age": request.age,
+            "recommendations": recommendations,
+            "created_at": datetime.utcnow(),
+            "created_by": context["user_id"]
+        })
+        await _create_notification(
+            db,
+            request.patient_id,
+            "Medication Recommendations Available",
+            f"AI suggestions reviewed for symptoms: {symptoms_text[:50]}",
+            "medication"
         )
 
     return {
         "patient_id": request.patient_id,
         "success": True,
+        "preview_only": request.preview_only,
         **recommendations
     }
 
@@ -657,7 +647,7 @@ Provide a clear, patient-friendly analysis. Use these exact section headers in y
 
 Format your reply so we can parse it. After your narrative for 1-5, add a line "OVERALL_RISK: <word>" and "RECOMMENDED_SPECIALIST: <name>". Then add "FINDINGS_JSON: " followed by the JSON array only."""
 
-    ai_response = await _call_gemini(prompt)
+    ai_response = await _call_gemini(prompt, max_tokens=4000)
     if not ai_response:
         ai_response = (
             "SHORT_DESCRIPTION: This appears to be a medical report. We could not analyze it automatically. "
@@ -1624,7 +1614,7 @@ Reply with ONLY a valid JSON object (no markdown, no extra text) with these exac
 
 Include a roadmap: what to do this week and next week to improve lifestyle. Be specific and encouraging."""
 
-        ai_response = await _call_gemini(prompt)
+        ai_response = await _call_gemini(prompt, max_tokens=2500)
         analysis = {}
         if ai_response:
             text = ai_response.strip()

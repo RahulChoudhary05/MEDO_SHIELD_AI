@@ -5,40 +5,40 @@ import { healthAPI } from '../services/api';
 import { useAuthStore } from '../store/store';
 
 export default function HealthChatbot() {
-  const { patientId } = useParams();
+  const { patientId: routePatientId } = useParams();
   const navigate = useNavigate();
-  const { role } = useAuthStore();
+  const { role, user } = useAuthStore();
+  const patientId = routePatientId || user?.id || user?._id || user?.user_id;
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [disclaimer, setDisclaimer] = useState(false);
   const [suggestedSpecialty, setSuggestedSpecialty] = useState(null);
 
   useEffect(() => {
-    // Auto-scroll to bottom
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
   useEffect(() => {
-    // Welcome message
-      setMessages([{
+    setMessages([{
       role: 'assistant',
-      content: 'Hello! I\'m your AI Health Assistant. Tell me what\'s going on—what happened, how you feel, or what you\'re worried about. I can suggest lifestyle tips and when to see a doctor. How can I help you today?',
+      content: 'Hello! I\'m your AI Health Assistant powered by Gemini. 👋\n\nTell me what\'s going on — what happened, how you feel, or what\'s worrying you. I\'ll ask follow-up questions to understand your situation better and suggest the right specialist for you.\n\nHow can I help you today?',
       timestamp: new Date()
     }]);
   }, []);
 
-  if (!patientId) {
+  if (!patientId || String(patientId) === 'undefined') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 to-blue-900 flex items-center justify-center">
         <div className="text-center text-white">
-          <p className="text-lg font-semibold">No patient selected.</p>
+          <div className="text-5xl mb-4">🤖</div>
+          <p className="text-lg font-semibold">Please log in to use the AI Assistant.</p>
           <button
-            onClick={() => navigate('/dashboard')}
-            className="mt-4 px-6 py-2 bg-blue-600 rounded-lg"
+            onClick={() => navigate('/login')}
+            className="mt-4 px-6 py-2 bg-blue-600 rounded-lg font-semibold hover:bg-blue-700"
           >
-            Go to Dashboard
+            Go to Login
           </button>
         </div>
       </div>
@@ -47,59 +47,84 @@ export default function HealthChatbot() {
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
-    const userMessage = { role: 'user', content: inputValue, timestamp: new Date() };
+  
+    const userMessage = {
+      role: 'user',
+      content: inputValue,
+      timestamp: new Date()
+    };
+  
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setSuggestedSpecialty(null);
     setLoading(true);
+  
     try {
-      const history = messages.map(m => ({ role: m.role, content: m.content }));
-      const response = await healthAPI.sendChatMessage(patientId, userMessage.content, history);
+      const history = messages.map(m => ({
+        role: m.role,
+        content: m.content
+      }));
+  
+      const response = await healthAPI.sendChatMessage(
+        patientId,
+        userMessage.content,
+        history
+      );
+  
       const data = response.data;
+  
       const assistantMessage = {
         role: 'assistant',
         content: data.assistant_response,
         timestamp: new Date(),
         disclaimer: data.disclaimer
       };
+  
       setMessages(prev => [...prev, assistantMessage]);
-      setDisclaimer(data.disclaimer);
-      if (data.suggested_specialty) setSuggestedSpecialty(data.suggested_specialty);
+  
+      if (data.suggested_specialty) {
+        setSuggestedSpecialty(data.suggested_specialty);
+      }
+  
     } catch (err) {
       console.error('Error sending message:', err);
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: 'Sorry, I encountered an error. Please try again.',
-        timestamp: new Date()
-      }]);
+  
+      setMessages(prev => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: 'Sorry, I encountered an error. Please try again.',
+          timestamp: new Date()
+        }
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
   const suggestedQuestions = [
-    '� What do my recent lab results mean?',
-    '💪 What exercises are safe for my condition?',
-    '🥗 What nutrition changes would help me?',
-    '💊 How should I take my medications?',
-    '😴 How can I improve my sleep quality?',
-    '🧘 I\'m stressed. What can I do?',
-    '❤️ What should my target heart rate be?',
-    '📊 What do my fitness metrics indicate?',
-    'I have a headache that won\'t go away.',
-    'Who should I see for joint pain?'
+    'I have a headache that won\'t go away — what could it be?',
+    'What exercises are safe for back pain?',
+    'What diet changes help lower blood pressure?',
+    'I feel dizzy after taking my medication — is that normal?',
+    'I can\'t sleep well — what can I do?',
+    'I\'m very stressed and anxious lately.',
+    'My heart beats fast sometimes — should I worry?',
+    'My blood sugar is high — what should I do?',
+    'I have joint pain and stiffness in the morning.',
+    'I feel short of breath during light activity.',
   ];
 
   const SPECIALTIES = [
-    { id: 'neurologist', name: 'Neurologist', icon: '🧠', desc: 'Brain, nerves, movement' },
-    { id: 'physiotherapist', name: 'Physiotherapist', icon: '🦵', desc: 'Movement, rehab, pain' },
+    { id: 'neurologist', name: 'Neurologist', icon: '🧠', desc: 'Brain, nerves, movement disorders' },
+    { id: 'physiotherapist', name: 'Physiotherapist', icon: '🦵', desc: 'Movement, rehabilitation, pain' },
     { id: 'cardiologist', name: 'Cardiologist', icon: '❤️', desc: 'Heart and circulation' },
     { id: 'therapist', name: 'Therapist', icon: '💬', desc: 'Mental health, counselling' },
-    { id: 'psychiatrist', name: 'Psychiatrist', icon: '🧠', desc: 'Mental health, medication' },
+    { id: 'psychiatrist', name: 'Psychiatrist', icon: '🧬', desc: 'Mental health, medication' },
     { id: 'dermatologist', name: 'Dermatologist', icon: '🩹', desc: 'Skin conditions' },
-    { id: 'general', name: 'General Practitioner', icon: '👨‍⚕️', desc: 'General health' },
-    { id: 'orthopedist', name: 'Orthopedist', icon: '🦴', desc: 'Bones, joints' },
-    { id: 'pulmonologist', name: 'Pulmonologist', icon: '🫁', desc: 'Lungs, breathing' },
+    { id: 'general', name: 'General Practitioner', icon: '👨‍⚕️', desc: 'General health concerns' },
+    { id: 'orthopedist', name: 'Orthopedist', icon: '🦴', desc: 'Bones, joints, muscles' },
+    { id: 'pulmonologist', name: 'Pulmonologist', icon: '🫁', desc: 'Lungs, breathing issues' },
     { id: 'gastroenterologist', name: 'Gastroenterologist', icon: '🫃', desc: 'Digestive system' },
     { id: 'endocrinologist', name: 'Endocrinologist', icon: '⚖️', desc: 'Hormones, diabetes' },
   ];
