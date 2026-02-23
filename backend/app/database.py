@@ -34,8 +34,8 @@ class Settings(BaseSettings):
     API_PORT: int = 8000
     DEBUG: bool = False
     ENVIRONMENT: str = "development"
-    FRONTEND_URL: str = "http://localhost:3000"
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
+    FRONTEND_URL: str = "https://medo-shield-ai.vercel.app"
+    ALLOWED_ORIGINS: str = "https://medo-shield-ai.vercel.app,http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173"
     FFT_SAMPLE_RATE: float = 30.0
     BASELINE_SESSIONS: int = 7
     DEVIATION_THRESHOLD: float = 2.5
