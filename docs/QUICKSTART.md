@@ -1,4 +1,4 @@
-# NEURO-SHIELD AI - Quick Start Guide
+# MEDO_SHIELD_AI - Quick Start Guide
 
 ## 60-Second Setup
 
@@ -289,7 +289,7 @@ BASELINE_SESSIONS=7
 ### Frontend (Optional)
 ```
 VITE_API_URL=http://localhost:8000
-VITE_APP_NAME=NEURO-SHIELD AI
+VITE_APP_NAME=MEDO_SHIELD_AI
 ```
 
 ---

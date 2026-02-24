@@ -1,8 +1,8 @@
-# NEURO-SHIELD AI - Complete Project Summary
+# MEDO_SHIELD_AI - Complete Project Summary
 
 ## Executive Summary
 
-**NEURO-SHIELD AI** is a production-ready, AI-powered healthcare platform for longitudinal monitoring of neurodegenerative diseases (specifically Parkinson's disease) using smartphone-based pose estimation and advanced signal analysis.
+**MEDO_SHIELD_AI** is a production-ready, AI-powered healthcare platform for longitudinal monitoring of neurodegenerative diseases (specifically Parkinson's disease) using smartphone-based pose estimation and advanced signal analysis.
 
 ### Key Innovation
 Converting real-time video into secure numerical features while preserving patient privacy—eliminating the need for invasive wearables or frequent clinic visits.
@@ -631,7 +631,7 @@ Documentation Files (5 files)
 
 ## Conclusion
 
-NEURO-SHIELD AI is a complete, production-ready platform for neurological disease monitoring. With comprehensive documentation, secure architecture, and modern tech stack, it's ready for immediate deployment or further development.
+MEDO_SHIELD_AI is a complete, production-ready platform for neurological disease monitoring. With comprehensive documentation, secure architecture, and modern tech stack, it's ready for immediate deployment or further development.
 
 The system demonstrates best practices in:
 - Full-stack development

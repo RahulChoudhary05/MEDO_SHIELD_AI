@@ -1,4 +1,4 @@
-# NEURO-SHIELD AI - API Documentation
+# MEDO_SHIELD_AI - API Documentation
 
 ## Base URL
 ```
@@ -377,7 +377,7 @@ Get API information and documentation links.
 **Response** (200 OK):
 ```json
 {
-  "name": "NEURO-SHIELD AI",
+  "name": "MEDO_SHIELD_AI",
   "version": "1.0.0",
   "description": "Privacy-first AI-powered longitudinal neurodegenerative monitoring platform",
   "status": "operational",

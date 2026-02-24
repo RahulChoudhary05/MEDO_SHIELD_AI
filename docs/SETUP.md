@@ -1,4 +1,4 @@
-# NEURO-SHIELD AI - Development Setup Guide
+# MEDO_SHIELD_AI - Development Setup Guide
 
 ## Prerequisites
 
@@ -210,7 +210,7 @@ npm --version   # Should be v9+
 # Create .env file
 cat > .env << EOF
 VITE_API_URL=http://localhost:8000
-VITE_APP_NAME=NEURO-SHIELD AI
+VITE_APP_NAME=MEDO_SHIELD_AI
 VITE_APP_VERSION=1.0.0
 EOF
 ```

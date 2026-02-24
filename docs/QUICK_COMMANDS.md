@@ -1,4 +1,4 @@
-# NEURO-SHIELD AI - Quick Command Reference
+# MEDO_SHIELD_AI - Quick Command Reference
 
 ## ⚡ Start Here (Copy & Paste)
 
@@ -6,7 +6,7 @@
 
 ```bash
 # Change to project directory
-cd "d:\VS Code\Working Codes\Web Projects\NEURO-SHIELD AI"
+cd "d:\VS Code\Working Codes\Web Projects\MEDO_SHIELD_AI"
 
 # Start all services
 docker-compose up -d
@@ -390,7 +390,7 @@ Choose your startup method above and run the code. Everything is configured and 
 
 **Most Important Command**:
 ```bash
-cd "d:\VS Code\Working Codes\Web Projects\NEURO-SHIELD AI"
+cd "d:\VS Code\Working Codes\Web Projects\MEDO_SHIELD_AI"
 docker-compose up -d
 ```
 

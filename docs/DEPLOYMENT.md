@@ -1,4 +1,4 @@
-# NEURO-SHIELD AI - Deployment Guide
+# MEDO_SHIELD_AI - Deployment Guide
 
 ## Quick Start (Local Docker Compose)
 
@@ -166,7 +166,7 @@ Add in Vercel dashboard:
 
 ```
 VITE_API_URL=https://neuro-shield-backend.onrender.com
-VITE_APP_NAME=NEURO-SHIELD AI
+VITE_APP_NAME=MEDO_SHIELD_AI
 VITE_APP_VERSION=1.0.0
 ```
 

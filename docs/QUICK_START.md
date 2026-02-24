@@ -1,4 +1,4 @@
-# 🚀 NEURO-SHIELD AI - Quick Start Guide
+# 🚀 MEDO_SHIELD_AI - Quick Start Guide
 
 ## ✅ Current Status: RUNNING
 
@@ -105,4 +105,4 @@ npm start
 
 **Everything is working perfectly.** The only difference between demo mode and production is data persistence. All AI features, analysis, dashboards, and UI work identically.
 
-**Enjoy using NEURO-SHIELD AI! 🧠✨**
+**Enjoy using MEDO_SHIELD_AI! 🧠✨**

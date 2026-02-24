@@ -1,8 +1,8 @@
-# NEURO-SHIELD AI - Complete Setup & Startup Guide (2026)
+# MEDO_SHIELD_AI - Complete Setup & Startup Guide (2026)
 
 ## 🚀 Project Status: PRODUCTION-READY
 
-Your NEURO-SHIELD AI platform is now fully configured and ready to run!
+Your MEDO_SHIELD_AI platform is now fully configured and ready to run!
 
 ---
 
@@ -50,7 +50,7 @@ Your NEURO-SHIELD AI platform is now fully configured and ready to run!
 **Prerequisites**: Docker Desktop installed
 
 ```bash
-cd /d/VS Code/Working Codes/Web Projects/NEURO-SHIELD AI
+cd /d/VS Code/Working Codes/Web Projects/MEDO_SHIELD_AI
 
 # Copy environment file
 cp backend/.env.example backend/.env
@@ -109,7 +109,7 @@ uvicorn app.main:app --reload --port 8000
 # Should see:
 # INFO:     Uvicorn running on http://0.0.0.0:8000
 # ✓ Connected to MongoDB
-# ✓ NEURO-SHIELD AI Backend Started
+# ✓ MEDO_SHIELD_AI Backend Started
 ```
 
 #### Terminal 3: Start Frontend
@@ -426,7 +426,7 @@ curl http://localhost:5173
 
 ## ✨ You're All Set!
 
-Your NEURO-SHIELD AI platform is ready. Start with Option A (Docker) for quickest setup, or Option B for development.
+Your MEDO_SHIELD_AI platform is ready. Start with Option A (Docker) for quickest setup, or Option B for development.
 
 **Let's go**: http://localhost:5173
 

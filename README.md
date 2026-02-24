@@ -1,8 +1,8 @@
-# NEURO-SHIELD AI
+# MEDO_SHIELD_AI
 
 ## 🧠 Project Vision
 
-Neuro-Shield AI is a **privacy-first, AI-driven longitudinal neurodegenerative monitoring platform** designed to transform how Parkinson's disease and related neurological disorders are tracked and managed.
+MEDO_SHIELD_AI is a **privacy-first, AI-driven longitudinal neurodegenerative monitoring platform** designed to transform how Parkinson's disease and related neurological disorders are tracked and managed.
 
 ### The Problem
 Traditional clinical assessments provide only brief, infrequent snapshots of a patient's condition, often missing daily fluctuations in:
@@ -11,7 +11,7 @@ Traditional clinical assessments provide only brief, infrequent snapshots of a p
 - Bradykinesia (slowness of movement)
 
 ### The Solution
-Neuro-Shield AI leverages **smartphone-based pose estimation**, **edge AI processing**, and **advanced signal analysis** to:
+MEDO_SHIELD_AI leverages **smartphone-based pose estimation**, **edge AI processing**, and **advanced signal analysis** to:
 - ✅ **Continuously monitor** neurological motor function without intrusive wearables
 - ✅ **Convert video** into numerical skeletal keypoints in real-time
 - ✅ **Analyze movement patterns** using AI algorithms
@@ -244,7 +244,7 @@ DEVIATION_THRESHOLD=2.5
 ### Frontend (.env)
 ```env
 VITE_API_URL=http://localhost:8000
-VITE_APP_NAME=NEURO-SHIELD AI
+VITE_APP_NAME=MEDO_SHIELD_AI
 VITE_APP_VERSION=1.0.0
 ```
 
@@ -617,7 +617,7 @@ This project is licensed under the MIT License - see LICENSE file for details.
 
 ## ⚠️ Disclaimer
 
-NEURO-SHIELD AI is a research and monitoring tool. It is **not** a diagnostic device and should **not** be used as a replacement for professional medical diagnosis or treatment. Always consult with healthcare providers for medical advice.
+MEDO_SHIELD_AI is a research and monitoring tool. It is **not** a diagnostic device and should **not** be used as a replacement for professional medical diagnosis or treatment. Always consult with healthcare providers for medical advice.
 
 ---
 
