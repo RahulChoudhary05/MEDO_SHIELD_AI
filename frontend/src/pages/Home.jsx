@@ -562,11 +562,7 @@ export default function Home() {
               >
                 Patient Login
               </Link>
-<<<<<<< HEAD
             </div>
-=======
-            </div> 
->>>>>>> origin/mayank-feature
           </div>
 
           {/* Doctor */}
