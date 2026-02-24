@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { healthAPI } from '../services/api';
+import { healthAPI, API_BASE_URL } from '../services/api';
 import { useAuthStore } from '../store/store';
 
 export default function HealthHistory() {
@@ -42,7 +42,7 @@ export default function HealthHistory() {
 
   const downloadPDF = async (entryId, patientName) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/health/video/analysis/${entryId}/pdf`, {
+      const response = await fetch(`${API_BASE_URL}/api/health/video/analysis/${entryId}/pdf`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
