@@ -11,6 +11,25 @@ from app.routers import patients_router, analysis_router, doctors_router, health
 import json
 from datetime import datetime
 
+
+def normalize_origin(origin: str) -> str:
+    cleaned = (origin or "").strip()
+    if not cleaned:
+        return ""
+    cleaned = cleaned.strip("[]")
+    cleaned = cleaned.strip().strip("\"").strip("'")
+    cleaned = cleaned.rstrip("/")
+    return cleaned
+
+
+def parse_allowed_origins(raw_origins: str) -> list[str]:
+    parsed_origins: list[str] = []
+    for item in (raw_origins or "").split(","):
+        normalized = normalize_origin(item)
+        if normalized:
+            parsed_origins.append(normalized)
+    return parsed_origins
+
 # Custom JSON Encoder for ObjectId and datetime
 class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -43,20 +62,32 @@ app = FastAPI(
 )
 
 # CORS Middleware - MUST be added FIRST (before all other middleware)
-allowed_origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()]
-if not allowed_origins:
-    allowed_origins = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost",
-        "http://127.0.0.1"
-    ]
+default_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://medo-shield-ai.vercel.app",
+]
+
+configured_origins = [
+    origin
+    for origin in parse_allowed_origins(settings.ALLOWED_ORIGINS)
+    if origin
+]
+
+frontend_url = normalize_origin(settings.FRONTEND_URL)
+if frontend_url:
+    configured_origins.append(frontend_url)
+
+allowed_origins = list(dict.fromkeys(configured_origins + default_origins))
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -105,6 +136,16 @@ async def health_check():
         "database": db_status,
         "demo_mode": Database.demo_mode,
         "timestamp": __import__("datetime").datetime.utcnow().isoformat()
+    }
+
+
+@app.get("/cors-debug")
+async def cors_debug():
+    """Debug endpoint to inspect active CORS origin settings."""
+    return {
+        "frontend_url": frontend_url,
+        "allowed_origins": allowed_origins,
+        "allow_origin_regex": r"https://.*\.vercel\.app",
     }
 
 # Error handlers

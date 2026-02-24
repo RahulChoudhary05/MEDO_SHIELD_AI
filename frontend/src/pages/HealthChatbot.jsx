@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { healthAPI } from '../services/api';
 import { useAuthStore } from '../store/store';
@@ -14,6 +14,10 @@ export default function HealthChatbot() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
+=======
+  // const [disclaimer, setDisclaimer] = useState(false);
+>>>>>>> origin/mayank-feature
   const [suggestedSpecialty, setSuggestedSpecialty] = useState(null);
 
   useEffect(() => {
@@ -81,11 +85,16 @@ export default function HealthChatbot() {
       };
   
       setMessages(prev => [...prev, assistantMessage]);
+<<<<<<< HEAD
   
       if (data.suggested_specialty) {
         setSuggestedSpecialty(data.suggested_specialty);
       }
   
+=======
+      // setDisclaimer(data.disclaimer);
+      if (data.suggested_specialty) setSuggestedSpecialty(data.suggested_specialty);
+>>>>>>> origin/mayank-feature
     } catch (err) {
       console.error('Error sending message:', err);
   
